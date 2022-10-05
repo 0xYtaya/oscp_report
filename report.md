@@ -6,7 +6,9 @@ In this step i uesed <b> nmap </b>  with option -sV
   -sV : Probe open ports to determine service/version info
 ```
 * <b>result :</b>
-image nmap result
+  
+![alt text](https://github.com/BleedTheFreak/oscp_report/blob/main/Screen%20Shot%202022-10-05%20at%2000.16.10.png)
+
 as shown in the image below i got in result open port 80 running http server and 22 running ssh .
 now i know that there is a webapp in this server i get into the webapp and found website hosted using wordpress and article in the website.
 image to the web site 
